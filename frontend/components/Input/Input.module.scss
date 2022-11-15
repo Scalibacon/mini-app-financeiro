@@ -1,0 +1,21 @@
+.wrapper{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  color: rgb(var(--white-700));
+  background: rgb(var(--gray-800));
+}
+
+.wrapper input{
+  background: transparent;
+  outline: none;
+  border: solid 1.5px transparent;
+  border-radius: 4px;
+  font-size: 14px;
+  color: rgb(var(--white-700));
+  padding: 16px 12px;
+
+  &:focus{
+    border: solid 1.5px rgb(var(--turquoise-500));
+  }
+}

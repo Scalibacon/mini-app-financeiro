@@ -1,0 +1,27 @@
+.transactionListItem{
+  padding: 16px 8px;
+  display: flex;
+  flex-direction: column;
+  border-bottom: solid 1px rgb(var(--turquoise-400));
+
+  .header{
+    font-weight: 600;
+    font-size: 17px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+
+    small{
+      font-weight: normal;
+      font-size: 12px;
+    }
+  }
+
+  .earn{
+    color: rgb(var(--green-200));
+  }
+  .loss{
+    color: rgb(var(--red-200));
+  }
+}

@@ -1,0 +1,45 @@
+.wrapper {
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.main {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+}
+
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-weight: bold;
+
+    &>span {
+      color: rgb(var(--white-700));
+    }
+  }
+
+  small{
+    display: flex;
+    gap: 0.25rem;
+
+    a{
+      color: rgb(var(--turquoise-500));
+    }
+  }
+}

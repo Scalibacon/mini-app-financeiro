@@ -1,0 +1,51 @@
+.wrapper{
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+}
+
+.main{
+  min-height: 100vh;
+  width: calc(100% - var(--sidebar-width));
+  margin-left: var(--sidebar-width);
+  padding: 16px;
+  display: flex;
+  gap: 4rem;
+  justify-content: space-between;
+}
+
+.userInfoContainer{
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.balanceContainer{
+  // width: 300px;
+  padding: 12px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  border: solid 2px rgb(var(--turquoise-400));
+
+  &>h3{
+    font-size: 16px;
+    font-weight: 600;
+    // text-decoration: underline;
+  }
+
+  &>b{
+    font-size: 24px;
+    color: rgb(var(--turquoise-500));
+  }
+}
+
+.transactionsContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &>h3{
+    color: rgb(var(--turquoise-500));
+  }
+}

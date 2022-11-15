@@ -1,0 +1,12 @@
+.button{
+  width: 100%;
+  padding: 12px 16px;
+  background: rgb(var(--turquoise-500));
+  color: rgb(var(--black-900));
+  font-weight: 600;
+  font-size: 16px;
+
+  &:hover{
+    background: rgb(var(--turquoise-400));
+  }
+}
