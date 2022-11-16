@@ -1,10 +1,20 @@
 import Head from 'next/head';
+import { useState } from 'react';
 import { Button } from '../components/Button';
+import { Modal } from '../components/Modal';
+import { NewTransactionForm } from '../components/NewTransactionForm';
 import { Sidebar } from '../components/Sidebar';
 import { TransactionList } from '../components/TransactionList';
 import styles from '../styles/Home.module.scss';
 
 export default function Home() {
+  const [isModalOpened, setIsModalOpened] = useState(false);
+
+  function onCloseModal() {
+    setIsModalOpened(false);
+    // atualizar saldo e histórico
+  }
+
   return (
     <div className={styles.wrapper}>
       <Head>
@@ -15,6 +25,13 @@ export default function Home() {
 
       <Sidebar />
 
+      {isModalOpened &&
+        <Modal onClose={onCloseModal}>
+          <NewTransactionForm />
+
+        </Modal>
+      }
+
       <main className={styles.main}>
         <section className={styles.userInfoContainer}>
           <h2>Olá, Matheus!</h2>
@@ -24,7 +41,7 @@ export default function Home() {
             <b>R$14.351,78</b>
           </div>
 
-          <Button>Nova transação</Button>
+          <Button onClick={() => setIsModalOpened(true)}>Nova transação</Button>
         </section>
 
         <section className={styles.transactionsContainer}>
