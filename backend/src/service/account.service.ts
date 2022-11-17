@@ -3,10 +3,10 @@ import jwt from "jsonwebtoken";
 import { prisma } from "../lib/prisma";
 import { User } from "@prisma/client";
 
-class AccountService{
-  async createAccount(initialBalance = 100){
+class AccountService {
+  async createAccount(initialBalance = 100) {
     const account = await prisma.account.create({
-      data: {        
+      data: {
         balance: initialBalance
       }
     });
@@ -14,11 +14,11 @@ class AccountService{
     return account;
   }
 
-  async createUser(username: string, password: string){
+  async createUser(username: string, password: string) {
     let user: User;
     let account = await this.createAccount();
-    
-    try{
+
+    try {
       user = await prisma.user.create({
         data: {
           username,
@@ -26,17 +26,17 @@ class AccountService{
           accountId: account.id
         }
       });
-    } catch(error: any){
+    } catch (error: any) {
       await this.deleteAccount(account.id);
 
       return new Error('Username já cadastrado!');
-    }   
+    }
 
     const token = generateToken(user.id);
     return token;
   }
 
-  async deleteAccount(accountId: number){
+  async deleteAccount(accountId: number) {
     await prisma.account.delete({
       where: {
         id: accountId
@@ -44,7 +44,7 @@ class AccountService{
     });
   }
 
-  async login(username: string, password: string){
+  async login(username: string, password: string) {
     const user = await prisma.user.findFirst({
       where: {
         username,
@@ -52,7 +52,7 @@ class AccountService{
       }
     });
 
-    if(!user){
+    if (!user) {
       return new Error('Usuário e/ou senha incorreto(s)');
     }
 
@@ -61,31 +61,43 @@ class AccountService{
     return token;
   }
 
-  async fetchUser(userId: number){
+  async fetchUser({
+    userId,
+    username
+  }: {
+    userId?: number,
+    username?: string
+  }) {
+    if(!userId && !username){
+      return new Error('Nenhum dado foi providenciado!')
+    }
+
     const user = await prisma.user.findFirst({
-      where:{
-        id: userId
-      }      
+      where: {
+        id: userId,
+        username: username
+      }
     });
 
-    if(!user){
-      return new Error('Dados não encontrados. Tente logar novamente.');
+    if (!user) {
+      return new Error('Dados de usuário não encontrados.');
     }
 
     const account = await prisma.account.findFirst({
       where: {
-        id: user.accountId
+        id: user.accountId,
       }
     });
 
     return {
       userId: user.id,
       username: user.username,
-      balance: account?.balance
+      accountId: account!.id,
+      balance: account!.balance
     }
   }
 
-  async testListUsers(){
+  async testListUsers() {
     const users = await prisma.user.findMany();
     console.log('users', users);
 

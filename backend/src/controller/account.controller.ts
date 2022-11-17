@@ -42,7 +42,8 @@ class AccountController {
 
       const decodedData = jwt.verify(token, process.env.SECRET || "secret") as User;
 
-      const data = await accountService.fetchUser(decodedData.id);
+      const data = await accountService.fetchUser({ userId: decodedData.id });
+      if (data instanceof Error) throw new Error(data.message);
 
       return response.status(200).json({ data: data });
     } catch (error) {
