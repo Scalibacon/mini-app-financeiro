@@ -1,5 +1,0 @@
-const useAuth = () => {
-
-}
-
-export { useAuth }

@@ -7,7 +7,12 @@
   font-size: 16px;
   border-radius: 4px;
 
-  &:hover{
+  &:not([disabled]):hover{
     background: rgb(var(--turquoise-400));
+  }
+
+  &[disabled]{
+    // filter: grayscale(1);
+    cursor: not-allowed;
   }
 }

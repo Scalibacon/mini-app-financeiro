@@ -1,14 +1,24 @@
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { Button } from '../components/Button';
 import { Modal } from '../components/Modal';
 import { NewTransactionForm } from '../components/NewTransactionForm';
 import { Sidebar } from '../components/Sidebar';
 import { TransactionList } from '../components/TransactionList';
+import { useAuth } from '../hooks/useAuth';
 import styles from '../styles/Home.module.scss';
 
 export default function Home() {
+  const router = useRouter();
+
   const [isModalOpened, setIsModalOpened] = useState(false);
+
+  const { isUserLoading, error, user } = useAuth();
+
+  if(!isUserLoading && (error || !user)){
+    router.push('/login');
+  }
 
   function onCloseModal() {
     setIsModalOpened(false);
