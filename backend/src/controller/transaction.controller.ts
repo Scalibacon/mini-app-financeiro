@@ -28,14 +28,14 @@ class TransactionController {
       const debitedData = await accountService.fetchUser({ userId: decodedData.id });
       if (debitedData instanceof Error) throw new Error(debitedData.message);
 
-      if (debitedData.balance < value) {
+      if (!debitedData.account || debitedData.account.balance < value) {
         throw new Error('Saldo insuficiente para realizar a transação.')
       }
 
       const creditedData = await accountService.fetchUser({ username: creditedUsername });
       if (creditedData instanceof Error) throw new Error(creditedData.message);
 
-      if (creditedData.userId === debitedData.userId) {
+      if (creditedData.id === debitedData.id) {
         throw new Error('Não é possível fazer uma transação para você mesmo!');
       }
 

@@ -76,6 +76,9 @@ class AccountService {
       where: {
         id: userId,
         username: username
+      },
+      include: {
+        account: true
       }
     });
 
@@ -83,17 +86,9 @@ class AccountService {
       return new Error('Dados de usuário não encontrados.');
     }
 
-    const account = await prisma.account.findFirst({
-      where: {
-        id: user.accountId,
-      }
-    });
-
     return {
-      userId: user.id,
-      username: user.username,
-      accountId: account!.id,
-      balance: account!.balance
+      ...user,
+      password: undefined
     }
   }
 
