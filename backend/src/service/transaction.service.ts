@@ -66,6 +66,31 @@ class AccountService {
     finalDate
   }: TransactionFilterType) {
     const transactions = await prisma.transaction.findMany({
+      select: {
+        id: true,
+        value: true,
+        createdAt: true,
+        creditedAccount: {
+          select: {
+            id: true,
+            user: {
+              select: {
+                username: true
+              }
+            }
+          }
+        },
+        debitedAccount: {
+          select: {
+            id: true,
+            user: {
+              select: {
+                username: true
+              }
+            }
+          }
+        }
+      },
       where: {
         OR: [
           {

@@ -73,13 +73,16 @@ class AccountService {
     }
 
     const user = await prisma.user.findFirst({
+      select: {
+        id: true,
+        accountId: true,
+        username: true,
+        account: true
+      },
       where: {
         id: userId,
         username: username
       },
-      include: {
-        account: true
-      }
     });
 
     if (!user) {
@@ -88,7 +91,6 @@ class AccountService {
 
     return {
       ...user,
-      password: undefined
     }
   }
 
