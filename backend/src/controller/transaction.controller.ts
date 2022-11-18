@@ -1,6 +1,7 @@
 import { User } from "@prisma/client";
 import { Request, Response } from "express";
 import jwt from 'jsonwebtoken';
+import moment from "moment";
 import accountService from "../service/account.service";
 import transactionService from "../service/transaction.service";
 
@@ -68,13 +69,15 @@ class TransactionController {
       const user = await accountService.fetchUser({ userId: decodedData.id });
       if (user instanceof Error) throw new Error(user.message);
 
-      // formatar data inicial e final
+      // sub 3 horas pq o banco tá operando com 3 horas a mais n sei pq :c
+      const formattedInitialDate = initialDate ? moment(initialDate).subtract(3, 'hours').format() : undefined;
+      const formattedFinalDate = finalDate ? moment(finalDate).add(1, 'days').subtract(3, 'hours').format() : undefined;
 
       const transactions = await transactionService.listTransactions({
         participantId: user.accountId,
         transactionType: transactionType ? parseInt(transactionType) : undefined,
-        initialDate: initialDate ? new Date(initialDate) : undefined,
-        finalDate: finalDate ? new Date(finalDate) : undefined,
+        initialDate: formattedInitialDate,
+        finalDate: formattedFinalDate
       })
 
       return response.status(200).json({ transactions });

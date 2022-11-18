@@ -1,3 +1,4 @@
+import moment from "moment";
 import { prisma } from "../lib/prisma";
 
 enum transactionTypes {
@@ -14,8 +15,8 @@ interface TransactionCreateType {
 interface TransactionFilterType {
   participantId: number,
   transactionType?: number | undefined,
-  initialDate?: Date,
-  finalDate?: Date
+  initialDate?: string,
+  finalDate?: string
 }
 
 class AccountService {
@@ -29,7 +30,7 @@ class AccountService {
         value,
         debitedAccountId,
         creditedAccountId,
-        createdAt: new Date()
+        createdAt: moment().format()
       }
     });
 
@@ -74,9 +75,14 @@ class AccountService {
             ...(!transactionType || transactionType === transactionTypes.CASH_IN ? { creditedAccountId: participantId } : {}),
           }
         ],
-        ...(initialDate ? { createdAt: { gte: initialDate } } : {}),
-        ...(finalDate ? { createdAt: { lte: finalDate } } : {}),
-        
+        AND: [
+          {
+            ...(initialDate ? { createdAt: { gte: initialDate } } : { id: { gte: 1 } }),
+          },
+          {
+            ...(finalDate ? { createdAt: { lte: finalDate } } : { id: { gte: 1 } }),
+          }
+        ]
       },
     });
 

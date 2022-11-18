@@ -1,5 +1,4 @@
 import { app } from "./app";
-import accountService from "./service/account.service";
 
 const PORT = process.env.PORT || 3333;
 
