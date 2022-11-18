@@ -1,19 +1,31 @@
 import { prisma } from "../lib/prisma";
 
-interface TransactionType {
+enum transactionTypes {
+  CASH_IN = 1,
+  CASH_OUT = 2
+}
+
+interface TransactionCreateType {
   debitedAccountId: number,
   creditedAccountId: number,
   value: number
 }
 
-class AccountService{
+interface TransactionFilterType {
+  participantId: number,
+  transactionType?: number | undefined,
+  initialDate?: Date,
+  finalDate?: Date
+}
+
+class AccountService {
   async createTransaction({
-    debitedAccountId, 
-    creditedAccountId, 
+    debitedAccountId,
+    creditedAccountId,
     value
-  }: TransactionType){
+  }: TransactionCreateType) {
     const transaction = await prisma.transaction.create({
-      data: {        
+      data: {
         value,
         debitedAccountId,
         creditedAccountId,
@@ -46,8 +58,29 @@ class AccountService{
     return transaction;
   }
 
-  async listTransactions(accountId: number){
+  async listTransactions({
+    participantId,
+    transactionType,
+    initialDate,
+    finalDate
+  }: TransactionFilterType) {
+    const transactions = await prisma.transaction.findMany({
+      where: {
+        OR: [
+          {
+            ...(!transactionType || transactionType === transactionTypes.CASH_OUT ? { debitedAccountId: participantId } : {}),
+          },
+          {
+            ...(!transactionType || transactionType === transactionTypes.CASH_IN ? { creditedAccountId: participantId } : {}),
+          }
+        ],
+        ...(initialDate ? { createdAt: { gte: initialDate } } : {}),
+        ...(finalDate ? { createdAt: { lte: finalDate } } : {}),
+        
+      },
+    });
 
+    return transactions;
   }
 }
 
