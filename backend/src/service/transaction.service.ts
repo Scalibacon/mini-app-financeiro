@@ -65,53 +65,61 @@ class AccountService {
     initialDate,
     finalDate
   }: TransactionFilterType) {
-    const transactions = await prisma.transaction.findMany({
+    console.log('aqui', transactionType, !transactionType || transactionType === transactionTypes.CASH_IN);
+    const teste = await prisma.account.findMany({
       select: {
-        id: true,
-        value: true,
-        createdAt: true,
-        creditedAccount: {
+        balance: true,
+        creditedTransactions: (!transactionType || transactionType === transactionTypes.CASH_IN) ? {
           select: {
-            id: true,
-            user: {
+            value: true,
+            createdAt: true,
+            debitedAccount: {
               select: {
-                username: true
+                id: true,
+                user: {
+                  select: {
+                    username: true
+                  }
+                }
               }
             }
+          },
+          where: {
+            AND: [
+              { createdAt:  { gte: initialDate } },
+              { createdAt:  { lte: finalDate } },
+            ],            
           }
-        },
-        debitedAccount: {
+        } : false,
+        debitedTransactions: (!transactionType || transactionType === transactionTypes.CASH_OUT) ? {
           select: {
-            id: true,
-            user: {
+            value: true,
+            createdAt: true,
+            creditedAccount: {
               select: {
-                username: true
+                id: true,
+                user: {
+                  select: {
+                    username: true
+                  }
+                }
               }
             }
+          },
+          where: {
+            AND: [
+              { createdAt:  { gte: initialDate } },
+              { createdAt:  { lte: finalDate } },
+            ],            
           }
-        }
+        } : false
       },
       where: {
-        OR: [
-          {
-            ...(!transactionType || transactionType === transactionTypes.CASH_OUT ? { debitedAccountId: participantId } : {}),
-          },
-          {
-            ...(!transactionType || transactionType === transactionTypes.CASH_IN ? { creditedAccountId: participantId } : {}),
-          }
-        ],
-        AND: [
-          {
-            ...(initialDate ? { createdAt: { gte: initialDate } } : { id: { gte: 1 } }),
-          },
-          {
-            ...(finalDate ? { createdAt: { lte: finalDate } } : { id: { gte: 1 } }),
-          }
-        ]
-      },
+        id: participantId,        
+      }
     });
 
-    return transactions;
+    return teste;
   }
 }
 
