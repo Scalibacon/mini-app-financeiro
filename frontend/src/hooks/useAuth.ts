@@ -2,10 +2,9 @@ import { useEffect, useState } from "react"
 import { getToken, isAuthenticated } from "../auth";
 
 interface UserType {
-  userId: number,
+  id: number,
   username: string,
-  accountId: number,
-  balance: number
+  account: { id: number, balance: number}
 }
 
 const useAuth = () => {

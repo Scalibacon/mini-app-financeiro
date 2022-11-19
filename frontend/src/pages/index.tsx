@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { getToken } from '../auth';
 import { Button } from '../components/Button';
 import { Modal } from '../components/Modal';
 import { NewTransactionForm } from '../components/NewTransactionForm';
@@ -9,10 +10,24 @@ import { TransactionList } from '../components/TransactionList';
 import { useAuth } from '../hooks/useAuth';
 import styles from '../styles/Home.module.scss';
 
+interface TransactionType {
+  id: number,
+  value: number,
+  createdAt: string,
+  creditedAccount: TransactionAccountType,
+  debitedAccount: TransactionAccountType
+}
+
+interface TransactionAccountType {
+  id: number,
+  user: { username: string}
+}
+
 export default function Home() {
   const router = useRouter();
 
   const [isModalOpened, setIsModalOpened] = useState(false);
+  const [transactions, setTransactions] = useState<TransactionType[]>([]);
 
   const { isUserLoading, error, user } = useAuth();
 
@@ -20,9 +35,28 @@ export default function Home() {
     router.push('/login');
   }
 
+  useEffect( () => {
+    fetchTransactions();
+  }, []);
+
   function onCloseModal() {
     setIsModalOpened(false);
     // atualizar saldo e histórico
+  }
+
+  async function fetchTransactions(){
+    console.log(getToken())
+    const response = await fetch('http://localhost:3333/transaction',{
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': getToken()
+      },
+    });
+
+    const result = await response.json();
+    console.log('result', result);
   }
 
   return (
@@ -44,11 +78,11 @@ export default function Home() {
 
       <main className={styles.main}>
         <section className={styles.userInfoContainer}>
-          <h2>Olá, Matheus!</h2>
+          <h2>Olá, {user?.username}!</h2>
 
           <div className={styles.balanceContainer}>
             <h3>Seu saldo</h3>
-            <b>R$14.351,78</b>
+            <b>{user?.account.balance.toLocaleString('pt-br', { style: 'currency', 'currency': 'BRL' })}</b>
           </div>
 
           <Button onClick={() => setIsModalOpened(true)}>Nova transação</Button>
