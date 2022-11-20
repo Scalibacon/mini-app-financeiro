@@ -1,11 +1,6 @@
 import { useEffect, useState } from "react"
 import { getToken, isAuthenticated } from "../auth";
-
-interface UserType {
-  id: number,
-  username: string,
-  account: { id: number, balance: number}
-}
+import { UserType } from "../types/core";
 
 const useAuth = () => {
   const [ isUserLoading, setIsUserLoading ] = useState(true);

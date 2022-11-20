@@ -9,25 +9,13 @@ import { Sidebar } from '../components/Sidebar';
 import { TransactionList } from '../components/TransactionList';
 import { useAuth } from '../hooks/useAuth';
 import styles from '../styles/Home.module.scss';
-
-interface TransactionType {
-  id: number,
-  value: number,
-  createdAt: string,
-  creditedAccount: TransactionAccountType,
-  debitedAccount: TransactionAccountType
-}
-
-interface TransactionAccountType {
-  id: number,
-  user: { username: string}
-}
+import { TransactionListType, TransactionType } from '../types/core';
 
 export default function Home() {
   const router = useRouter();
 
   const [isModalOpened, setIsModalOpened] = useState(false);
-  const [transactions, setTransactions] = useState<TransactionType[]>([]);
+  const [transactions, setTransactions] = useState<TransactionListType>();
 
   const { isUserLoading, error, user } = useAuth();
 
@@ -45,7 +33,6 @@ export default function Home() {
   }
 
   async function fetchTransactions(){
-    console.log(getToken())
     const response = await fetch('http://localhost:3333/transaction',{
       method: 'GET',
       headers: {
@@ -56,7 +43,13 @@ export default function Home() {
     });
 
     const result = await response.json();
-    console.log('result', result);
+
+    if(result.error){
+      alert('Erro ao buscar transações: ' + result.error);
+      return;
+    }
+
+    setTransactions( old => result.transactions as TransactionListType);
   }
 
   return (
@@ -90,7 +83,7 @@ export default function Home() {
 
         <section className={styles.transactionsContainer}>
           <h3>Histórico de Transações</h3>
-          <TransactionList />
+          { transactions && <TransactionList transactions={ transactions } /> }
         </section>
       </main>
     </div>

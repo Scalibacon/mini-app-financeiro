@@ -66,11 +66,12 @@ class AccountService {
     finalDate
   }: TransactionFilterType) {
     console.log('aqui', transactionType, !transactionType || transactionType === transactionTypes.CASH_IN);
-    const teste = await prisma.account.findMany({
+    const teste = await prisma.account.findFirst({
       select: {
         balance: true,
         creditedTransactions: (!transactionType || transactionType === transactionTypes.CASH_IN) ? {
           select: {
+            id: true,
             value: true,
             createdAt: true,
             debitedAccount: {
@@ -93,6 +94,7 @@ class AccountService {
         } : false,
         debitedTransactions: (!transactionType || transactionType === transactionTypes.CASH_OUT) ? {
           select: {
+            id: true,
             value: true,
             createdAt: true,
             creditedAccount: {

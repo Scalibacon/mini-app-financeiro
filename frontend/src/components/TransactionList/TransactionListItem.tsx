@@ -1,26 +1,27 @@
+import moment from 'moment';
+import { TransactionType } from '../../types/core';
 import styles from './TransactionList.module.scss';
 
 interface TransactionListItemProps {
-  isReceiving: boolean;
-  amount: number;
-  peerName: string;
-  data?: Date;
+  transaction: TransactionType
 }
 
 export const TransactionListItem = ({
-  isReceiving, amount, peerName
+  transaction
 }: TransactionListItemProps) => {
+  const isReceiving = transaction.debitedAccount ? true : false;
+
   return (
     <div className={styles.transactionListItem}>
       <span className={styles.header}>
         {isReceiving ? 'Transferência recebida' : 'Transferência realizada'}
-        <small>03 NOV</small>
+        <small>{ moment(transaction.createdAt).format('DD[/]MMM').toUpperCase() }</small>
       </span>
-      <span>{peerName}</span>
+      <span>{ isReceiving ? transaction.debitedAccount?.user.username : transaction.creditedAccount?.user.username }</span>
       <span 
         className={isReceiving ? styles.earn : styles.loss}
       >
-        {amount.toLocaleString('pt-br', { style: 'currency', 'currency': 'BRL' })}
+        {transaction.value.toLocaleString('pt-br', { style: 'currency', 'currency': 'BRL' })}
       </span>
     </div>
   )
