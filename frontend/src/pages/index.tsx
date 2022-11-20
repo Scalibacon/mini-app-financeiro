@@ -65,7 +65,6 @@ export default function Home() {
       {isModalOpened &&
         <Modal onClose={onCloseModal}>
           <NewTransactionForm />
-
         </Modal>
       }
 

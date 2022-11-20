@@ -12,8 +12,6 @@ export const TransactionList = ({
 }: TransactionListProps) => {
   const [ mergedTransactions, setMergedTransactions ] = useState<TransactionType[]>([]);
 
-  console.log('transactions', transactions);  
-
   useEffect( () => {
     function mergeTransactions(){
       let mergedTransactions: TransactionType[] = [];

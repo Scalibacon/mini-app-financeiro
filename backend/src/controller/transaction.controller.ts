@@ -42,7 +42,7 @@ class TransactionController {
       await transactionService.createTransaction({
         debitedAccountId: debitedData.accountId,
         creditedAccountId: creditedData.accountId,
-        value
+        value: parseFloat(value)
       });
 
       return response.status(201).json({ message: `Transação de ${value.toLocaleString('pt-br', { style: 'currency', 'currency': 'BRL' })} realizada com sucesso!` });
