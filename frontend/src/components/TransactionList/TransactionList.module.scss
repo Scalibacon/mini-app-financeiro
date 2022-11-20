@@ -1,3 +1,25 @@
+.wrapper{
+  max-height: calc(100vh - 32px - 32px);
+  overflow-y: auto;
+  
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(var(--black-800),0.8);
+  }  
+
+  &::-webkit-scrollbar-thumb {
+    background: rgb(var(--turquoise-500),0.5);
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgb(var(--turquoise-500),0.8);
+  }
+}
+
 .transactionListItem{
   padding: 16px 8px;
   display: flex;

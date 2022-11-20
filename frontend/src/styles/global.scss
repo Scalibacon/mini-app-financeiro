@@ -24,6 +24,10 @@ button{
   outline: none;
   cursor: pointer;
 }
+::-webkit-calendar-picker-indicator {
+  // filter: invert(80%) sepia(52%) saturate(560%) hue-rotate(144deg) brightness(102%) contrast(102%);
+  filter: invert(1);
+}
 
 :root{
   --black-900: 0,0,0;
@@ -42,5 +46,5 @@ button{
 
   --red-200: 250, 95, 77;
 
-  --sidebar-width: 90px;
+  --sidebar-width: 100px;
 }

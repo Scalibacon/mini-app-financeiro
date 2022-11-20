@@ -65,7 +65,6 @@ class AccountService {
     initialDate,
     finalDate
   }: TransactionFilterType) {
-    console.log('aqui', transactionType, !transactionType || transactionType === transactionTypes.CASH_IN);
     const teste = await prisma.account.findFirst({
       select: {
         balance: true,

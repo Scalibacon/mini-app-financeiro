@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { SignOut } from 'phosphor-react';
 import { logout } from '../../auth';
 import styles from './Sidebar.module.scss';
 
@@ -12,7 +13,10 @@ const Sidebar = () => {
 
   return (
     <nav className={styles.wrapper}>
-      <a onClick={handleLogout}>Logout</a>
+      <a onClick={handleLogout} className={styles.logout}>
+        <SignOut size={20}/>
+        LogOut
+      </a>
     </nav>
   )
 }
