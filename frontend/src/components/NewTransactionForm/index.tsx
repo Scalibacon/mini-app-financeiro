@@ -16,8 +16,10 @@ export const NewTransactionForm = (props: NewTransactionFormProps) => {
     const data = new FormData(event.currentTarget);
     const body = {
       creditedUsername: data.get('username'),
-      value: data.get('value')
+      value: data.get('value') as string | undefined
     };
+
+    body.value = body.value?.replace(',', '.');
 
     const response = await fetch('http://localhost:3333/transaction', {
       method: 'POST',
@@ -60,7 +62,7 @@ export const NewTransactionForm = (props: NewTransactionFormProps) => {
 
       <div className={styles.formLine}>
         <label>Valor a ser transferido</label>
-        <Input name="value" id="value" placeholder='Digite o valor' required />
+        <Input type="number" step=".01" name="value" id="value" placeholder='Digite o valor' required />
       </div>
 
       <Button type="submit">Transferir</Button>
