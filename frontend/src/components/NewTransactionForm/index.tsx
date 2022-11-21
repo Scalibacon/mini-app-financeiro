@@ -5,7 +5,11 @@ import { Button } from '../Button';
 import { Input } from '../Input';
 import styles from './NewTransactionForm.module.scss';
 
-export const NewTransactionForm = () => {
+interface NewTransactionFormProps {
+  onSuccess?: () => void
+}
+
+export const NewTransactionForm = (props: NewTransactionFormProps) => {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -34,6 +38,8 @@ export const NewTransactionForm = () => {
         confirmButtonText: 'Fechar'
       });
     }
+
+    if(props.onSuccess) props.onSuccess();
 
     return Swal.fire({
       title: 'Sucesso!',

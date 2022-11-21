@@ -107,7 +107,7 @@ export default function Home() {
 
       {isTransactionModalOpened &&
         <Modal onClose={onCloseTransactionModal}>
-          <NewTransactionForm />
+          <NewTransactionForm onSuccess={fetchTransactions}/>
         </Modal>
       }
 
